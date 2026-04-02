@@ -1,4 +1,5 @@
 local mod = get_mod("scoreboard")
+require("scripts/extension_systems/health/health_extension_base")
 mod.name = "scoreboard"
 
 local DMF = get_mod("DMF")
@@ -186,6 +187,40 @@ end
 mod.initialize_timer = function(self)
 	self.timer = _os.time()
 end
+-- mod.set_havoc_level = function(self, havoc)
+-- 	self.havoc = havoc
+-- end
+
+mod.parse_havoc_data = function(self, data)
+	if data then
+		local working = tostring(data)
+		--local parsed_data = {}
+		local split1 = string.split(working, ";")
+		local mission = split1[1]
+
+		--self.mission = mission
+
+		local level = split1[2]
+
+		self.hlevel = level
+
+		self.scircumstances = split1[5]
+		local split2 = string.split(self.scircumstances, ":")
+		local circumstances_entry = {}
+
+		for i = 1, #split2 do
+			circumstances_entry[#circumstances_entry + 1] = split2[i]
+		end
+
+		self.acircumstances = circumstances_entry
+	else
+		self.hlevel = nil
+		self.scircumstances = nil
+		self.acircumstances = nil
+	end
+
+	--return parsed_data
+end
 
 mod.load_package = function(self, package_name)
 	local package_manager = self.package_manager
@@ -354,6 +389,8 @@ mod:hook(CLASS.StateGameplay, "on_enter", function(func, self, parent, params, c
 	mod:set_mission_circumstance(params.mechanism_data.circumstance_name)
 	mod:set_mission_challenge(params.mechanism_data.challenge)
 	mod:set_mission_resistance(params.mechanism_data.resistance)
+	mod:echo(params.mechanism_data.havoc_data)
+	mod:parse_havoc_data(params.mechanism_data.havoc_data)
 	mod:initialize_timer()
 end)
 
