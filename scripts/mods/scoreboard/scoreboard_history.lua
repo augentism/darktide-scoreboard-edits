@@ -178,7 +178,7 @@ mod.save_scoreboard_history_entry = function(self, sorted_rows)
 
 	-- Open file
 	local file = assert(_io.open(path, "w+"))
-	mod.checked_history_files = nil
+
 	-- Players
 	local players = self.player_manager:players()
 	if self.debug_value then
