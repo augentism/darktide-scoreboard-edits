@@ -180,6 +180,7 @@ ScoreboardHistoryView._setup_category_config = function(self, scan_dir)
         -- local category_display_name = category_config.display_name or category_config.name
         local mission_name = ""
         local mission_subname = ""
+        local circumstances = ""
         if category_config.mission_name then
             local mission_settings = Missions[category_config.mission_name]
             if mission_settings then
@@ -205,21 +206,35 @@ ScoreboardHistoryView._setup_category_config = function(self, scan_dir)
                     end
                 end
             end
-            if category_config.mission_circumstance ~= "" then
-                local mission_circumstance = Circumstance[category_config.mission_circumstance]
-                if ( mission_circumstance and mission_circumstance.ui ) then
+            if category_config.hlevel ~= "" then
+                local hlevel = tonumber(category_config.hlevel)
+                if hlevel and hlevel > 0 then
                     if mission_subname == "" then
-                        mission_subname = "\n"..Localize(mission_circumstance.ui.display_name)
+                        mission_subname = "\nHavoc "..tostring(hlevel)
                     else
-                        mission_subname = mission_subname.." | "..Localize(mission_circumstance.ui.display_name)
+                        mission_subname = mission_subname.." | Havoc "..tostring(hlevel)
                     end
+                end
+            end
+        end
+
+        if category_config.scircumstances and category_config.scircumstances ~= "" then
+            local split = string.split(category_config.scircumstances, ":")
+            for i = 1, #split - 1 do  -- #split - 1 to ignore last circumstance
+                local circumstance = split[i]
+                local circumstance_template = Circumstance[circumstance]
+                local circumstance_name = (circumstance_template and circumstance_template.ui and circumstance_template.ui.display_name and Localize(circumstance_template.ui.display_name)) or circumstance
+                if circumstances == "" then
+                    circumstances = "\n"..circumstance_name
+                else
+                    circumstances = circumstances.." | "..circumstance_name
                 end
             end
         end
 
         mod:add_global_localize_strings({
             ["loc_scoreboard_history_view_entry_"..tostring(category_config.date)] = {
-                en = tostring(category_config.date)..mission_name..mission_subname,
+                en = tostring(category_config.date)..mission_name..mission_subname..circumstances,
             },
         })
         local category_display_name = "loc_scoreboard_history_view_entry_"..tostring(category_config.date)
