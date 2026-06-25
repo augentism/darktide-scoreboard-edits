@@ -397,20 +397,6 @@ mod:hook(CLASS.EndPlayerView, "on_exit", function(func, self, ...)
 	if view then view:move_scoreboard(-300, 0) end
 end)
 
-mod:hook(CLASS.MultiplayerSessionManager, "leave", function(func, self, reason)
-	mod:echo(reason)
-	--if reason == "leave_mission" or reason == "skip_end_of_round" then
-	if reason == "leave_mission" then
-		-- mod:echo("inside if")
-		--local sorted_rows = self.sorted_rows or {}
-        -- mod:save_scoreboard_history_entry(mod.registered_scoreboard_rows)
-		local sorted_rows = mod:get_rows_in_groups(mod.registered_scoreboard_rows)
-        mod:save_scoreboard_history_entry(sorted_rows)
-	end
-	
-	func(self, reason)
-end)
-
 -- ##### ██╗███╗   ██╗ ██████╗██╗     ██╗   ██╗██████╗ ███████╗███████╗ ###############################################
 -- ##### ██║████╗  ██║██╔════╝██║     ██║   ██║██╔══██╗██╔════╝██╔════╝ ###############################################
 -- ##### ██║██╔██╗ ██║██║     ██║     ██║   ██║██║  ██║█████╗  ███████╗ ###############################################

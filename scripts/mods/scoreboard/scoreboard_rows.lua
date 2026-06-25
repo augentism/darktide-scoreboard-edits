@@ -662,7 +662,7 @@ mod.scoreboard_rows = {
 			"cultist_mutant",
 			"cultist_mutant_mutator",
 			"renegade_netgunner",
-    		"chaos_armored_hound",
+			"chaos_armored_hound",
 		},
 		group = "offense",
 		setting = "plugin_disabler_threats",
