@@ -220,14 +220,16 @@ ScoreboardHistoryView._setup_category_config = function(self, scan_dir)
 
         if category_config.scircumstances and category_config.scircumstances ~= "" then
             local split = string.split(category_config.scircumstances, ":")
-            for i = 1, #split - 1 do  -- #split - 1 to ignore last circumstance
+            for i = 1, #split do
                 local circumstance = split[i]
-                local circumstance_template = Circumstance[circumstance]
-                local circumstance_name = (circumstance_template and circumstance_template.ui and circumstance_template.ui.display_name and Localize(circumstance_template.ui.display_name)) or circumstance
-                if circumstances == "" then
-                    circumstances = "\n"..circumstance_name
-                else
-                    circumstances = circumstances.." | "..circumstance_name
+                if circumstance ~= "mutator_highest_difficulty" then
+                    local circumstance_template = Circumstance[circumstance]
+                    local circumstance_name = (circumstance_template and circumstance_template.ui and circumstance_template.ui.display_name and Localize(circumstance_template.ui.display_name)) or circumstance
+                    if circumstances == "" then
+                        circumstances = "\n"..circumstance_name
+                    else
+                        circumstances = circumstances.." | "..circumstance_name
+                    end
                 end
             end
         end

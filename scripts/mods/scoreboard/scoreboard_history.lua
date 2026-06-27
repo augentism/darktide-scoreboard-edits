@@ -314,6 +314,9 @@ mod.save_scoreboard_history_entry = function(self, sorted_rows)
 	if not cache or type(cache) ~= "table" then cache = {} end
 	cache[#cache+1] = file_name
 	mod:set_scoreboard_history_entries_cache(cache)
+
+	-- Force the parsed-entries cache to rebuild so the new entry shows up immediately
+	mod.checked_history_files = nil
 end
 
 mod.load_scoreboard_history_entry = function(self, path, date, only_head)

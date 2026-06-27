@@ -386,6 +386,7 @@ mod:hook(CLASS.StateGameplay, "on_enter", function(func, self, parent, params, c
 	mod:set_mission_circumstance(params.mechanism_data.circumstance_name)
 	mod:set_mission_challenge(params.mechanism_data.challenge)
 	mod:set_mission_resistance(params.mechanism_data.resistance)
+	--mod:echo(params.mechanism_data.havoc_data)
 	mod:parse_havoc_data(params.mechanism_data.havoc_data)
 	mod:initialize_timer()
 end)
@@ -411,6 +412,15 @@ mod:hook_require("scripts/ui/views/end_player_view/end_player_view_definitions",
 		card_carousel.horizontal_alignment = "right"
 		card_carousel.position = {-130, 350, 0}
 	end
+end)
+
+mod:hook_safe(CLASS.MultiplayerSessionManager, "_leave", function(self,reason)
+	--mod:echo(reason)
+	if reason == "exit_to_main_menu" or reason == "leave_to_hub" then return end
+
+	local sorted_rows = mod:get_rows_in_groups(mod.registered_scoreboard_rows)
+	mod:save_scoreboard_history_entry(sorted_rows)
+
 end)
 
 mod:hook(CLASS.EndPlayerView, "on_enter", function(func, self, ...)
