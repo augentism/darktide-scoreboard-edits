@@ -216,13 +216,24 @@ ScoreboardHistoryView._setup_category_config = function(self, scan_dir)
                     end
                 end
             end
+            if category_config.mission_circumstance ~= "" and category_config.mission_circumstance ~= "nil" then
+                local mission_circumstance = Circumstance[category_config.mission_circumstance]
+                if ( mission_circumstance and mission_circumstance.ui ) then
+                    if circumstances == "" then
+                        circumstances = "\n"..Localize(mission_circumstance.ui.display_name)
+                    else
+                        circumstances = circumstances.." | "..Localize(mission_circumstance.ui.display_name)
+                    end
+                end
+            end
+
         end
 
         if category_config.scircumstances and category_config.scircumstances ~= "" then
             local split = string.split(category_config.scircumstances, ":")
             for i = 1, #split do
                 local circumstance = split[i]
-                if circumstance ~= "mutator_highest_difficulty" then
+                if circumstance ~= "mutator_highest_difficulty" and circumstance ~= "nil" then
                     local circumstance_template = Circumstance[circumstance]
                     local circumstance_name = (circumstance_template and circumstance_template.ui and circumstance_template.ui.display_name and Localize(circumstance_template.ui.display_name)) or circumstance
                     if circumstances == "" then
@@ -233,6 +244,8 @@ ScoreboardHistoryView._setup_category_config = function(self, scan_dir)
                 end
             end
         end
+
+
 
         mod:add_global_localize_strings({
             ["loc_scoreboard_history_view_entry_"..tostring(category_config.date)] = {

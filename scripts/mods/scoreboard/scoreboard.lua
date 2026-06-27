@@ -415,8 +415,8 @@ mod:hook_require("scripts/ui/views/end_player_view/end_player_view_definitions",
 end)
 
 mod:hook_safe(CLASS.MultiplayerSessionManager, "_leave", function(self,reason)
-	--mod:echo(reason)
-	if reason == "exit_to_main_menu" or reason == "leave_to_hub" then return end
+	mod:echo(reason)
+	if reason ~= "leave_mission" then return end
 
 	local sorted_rows = mod:get_rows_in_groups(mod.registered_scoreboard_rows)
 	mod:save_scoreboard_history_entry(sorted_rows)
